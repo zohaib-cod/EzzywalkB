@@ -4,7 +4,12 @@ import Groq from 'groq-sdk';
 import * as cheerio from 'cheerio';
 
 const router = express.Router();
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+let groq;
+try {
+  groq = new Groq({ apiKey: process.env.GROQ_API_KEY || 'dummy_key' });
+} catch (e) {
+  console.warn("Groq initialization failed (likely missing API key)");
+}
 
 // Crawler helper
 async function crawlPage(path) {
@@ -25,6 +30,9 @@ async function crawlPage(path) {
 }
 
 router.post('/chat', async (req, res) => {
+  if (!process.env.GROQ_API_KEY) {
+    return res.status(500).json({ error: 'Groq API Key is not configured on the server.' });
+  }
   try {
     const { messages } = req.body;
     
