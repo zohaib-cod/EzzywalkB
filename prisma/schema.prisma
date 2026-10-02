@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("USER") // USER or ADMIN or MASTER_ADMIN
+  isBlocked Boolean  @default(false)
+  orders    Order[]
+  pushSubs  PushSubscription[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PushSubscription {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String
+  keys      Json
+  createdAt DateTime @default(now())
+}
+
+model AdminOTP {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model AdminInvite {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model PasswordResetOTP {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  description     String?
+  price           Float
+  category        String
+  brand           String?
+  imageUrl        String?
+  stock           Int      @default(0)
+  isSeasonEndSale Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Order {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String?  @db.ObjectId
+  user         User?    @relation(fields: [userId], references: [id])
+  status       String   @default("PENDING") // PENDING, PROCESSING, SHIPPED, DELIVERED
+  totalAmount  Float
+  items        Json     // Array of { productId, quantity, price }
+  customerInfo Json?    // To store guest/customer checkout info like name, address, phone
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Banner {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  label       String   @default("New Collection")
+  title       String   @default("Shop Premium Slippers")
+  description String   @default("Experience unmatched comfort and style for your everyday walk.")
+  imageUrl    String   @default("https://images.unsplash.com/photo-1603487742131-4160ec999306?q=80&w=1000&auto=format&fit=crop")
+  linkUrl     String   @default("/products?category=SLIPPER")
+  linkText    String   @default("Shop Now")
+  isActive    Boolean  @default(true)
+  tickerText  String   @default("Welcome to Ezzywalk! Flat 30% Off on all summer collections. Cash on delivery available.")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model HeroSlide {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  label       String?
+  title       String?
+  subtitle    String?
+  imageUrl    String
+  linkUrl     String?
+  linkText    String?
+  bgColor     String   @default("bg-gray-900") // to keep tailwind classes if needed
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
