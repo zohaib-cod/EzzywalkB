@@ -49,4 +49,28 @@ router.put('/', authAdmin, async (req, res) => {
   }
 });
 
+// Admin: Delete banner
+router.delete('/', authAdmin, async (req, res) => {
+  try {
+    await prisma.banner.deleteMany({});
+    res.json({ message: 'Banner deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete banner' });
+  }
+});
+
+// Admin: Delete banner by id
+router.delete('/:id', authAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.banner.delete({
+      where: { id }
+    });
+    res.json({ message: 'Banner deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete banner' });
+  }
+});
+
 export default router;
+

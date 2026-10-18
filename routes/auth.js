@@ -45,7 +45,7 @@ router.post('/login', async (req, res) => {
       return res.status(403).json({ error: 'Your account has been blocked by the Master Admin.' });
     }
 
-    const expiresIn = keepLogged ? '30d' : '2h';
+    const expiresIn = keepLogged ? '30d' : '7d';
     const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn });
     res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
   } catch (error) {

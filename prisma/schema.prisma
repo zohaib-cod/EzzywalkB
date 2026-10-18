@@ -106,3 +106,23 @@ model HeroSlide {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model LegacySection {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  label       String   @default("Our Legacy")
+  title       String   @default("Crafting footwear the right way, since 1998.")
+  description String   @default("Ezzywalk began in 1998 with one standard: make shoes that last, in every style our customers live in. Nearly three decades on, that expertise runs through every pair — leather, casual, sport and beyond — each built in our workshop with the same obsession for comfort and fit.")
+  imageUrl    String   @default("https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80")
+  stat1Value  String   @default("27")
+  stat1Label  String   @default("years of craft")
+  stat2Value  String   @default("40+")
+  stat2Label  String   @default("retail stores")
+  stat3Value  String   @default("300")
+  stat3Label  String   @default("wholesale partners")
+  buttonText  String   @default("Shop the collection")
+  buttonLink  String   @default("/products")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

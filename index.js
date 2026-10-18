@@ -7,6 +7,7 @@ import bannerRoutes from './routes/banners.js';
 import productsRoutes from './routes/products.js';
 import ordersRoutes from './routes/orders.js';
 import heroSlidesRoutes from './routes/heroSlides.js';
+import legacyRoutes from './routes/legacy.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api/products', productsRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/banners', bannerRoutes);
 app.use('/api/heroSlides', heroSlidesRoutes);
+app.use('/api/legacy', legacyRoutes);
 app.use('/api/ai', aiRoutes);
 
 const PORT = process.env.PORT || 5000;
